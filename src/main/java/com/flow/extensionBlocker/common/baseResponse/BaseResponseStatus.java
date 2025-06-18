@@ -13,7 +13,11 @@ public enum BaseResponseStatus {
     /**
      * 2000: Validation Error
      */
-    VALIDATION_ERROR(false, 2000, "요청 데이터가 유효하지 않습니다."),
+    VALIDATION_ERROR(false, 2000, "유효성 검증에 실패하였습니다."),
+    EXTENSION_NOT_FOUND(false, 2001, "요청 데이터가 유효하지 않습니다."),
+    EXTENSION_NAME_LENGTH_EXCEEDED(false, 2002, "확장자은 20자 내로 입력가능합니다."),
+    EXTENSION_LIMIT_EXCEEDED(false, 2003, "확장자 차단은 200개까지 활성화 가능합니다."),
+    EXTENSION_NAME_DUPLICATED(false, 2004, "해당 확장자가 이미 존재합니다."),
 
     /**
      * 4000: Internal Server Error

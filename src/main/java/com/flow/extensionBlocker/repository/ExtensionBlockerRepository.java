@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlocker, Long> {
     ExtensionBlocker findByName(String name);
+
+    long countByIsBannedTrue();
 }
