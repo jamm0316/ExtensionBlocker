@@ -1,5 +1,7 @@
 package com.flow.extensionBlocker.service;
 
+import com.flow.extensionBlocker.common.baseException.BaseException;
+import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
 import com.flow.extensionBlocker.domain.ExtensionBlocker;
 import com.flow.extensionBlocker.dto.ExtensionBlockerRequestDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
@@ -25,20 +27,70 @@ public class ExtensionBlockerService {
         extensionRequestDTO.setName(lowerCaseName);
 
         ExtensionBlocker existing = repository.findByName(lowerCaseName);
-        if (existing != null) {
+
+        if (extensionRequestDTO.getName().length() > 20) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
+        }
+
+        if (existing != null && !existing.isBanned()) {
             existing.setBanned(true);
             return entityToDto(existing);
+        }
+
+        if (repository.countByIsBannedTrue() == 200) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
         }
 
         ExtensionBlocker entity = repository.save(dtoToEntity(extensionRequestDTO));
         return entityToDto(entity);
     }
 
-    public ExtensionBlocker dtoToEntity(ExtensionBlockerRequestDTO requestDTO) {
+    public ExtensionBlockerResponseDTO updateExtension(ExtensionBlockerRequestDTO extensionRequestDTO) {
+        ExtensionBlocker entity = repository.findById(extensionRequestDTO.getId())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND));
+
+        String newName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
+        ExtensionBlocker duplicate = repository.findByName(newName);
+        if (duplicate != null && duplicate.getId() != entity.getId()) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_DUPLICATED);
+        }
+
+        entity.setName(extensionRequestDTO.getName().toLowerCase(Locale.ROOT));
+        entity.setBanned(extensionRequestDTO.isBanned());
+        return entityToDto(entity);
+    }
+
+    public void deleteExtension(String name) {
+        ExtensionBlocker entity = repository.findByName(name);
+        if (entity == null) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
+        }
+        entity.setBanned(false);
+    }
+
+    public void deleteForceExtension(String name) {
+        ExtensionBlocker entity = repository.findByName(name);
+        if (entity == null) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
+        }
+        repository.delete(entity);
+    }
+
+    /*
+    public ExtensionBlockerResponseDTO selectExtensionByName(String name) {
+        ExtensionBlocker entity = repository.findByName(name);
+        if (entity == null) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
+        }
+        return entityToDto(entity);
+    }
+    */
+
+    private ExtensionBlocker dtoToEntity(ExtensionBlockerRequestDTO requestDTO) {
         return modelMapper.map(requestDTO, ExtensionBlocker.class);
     }
 
-    public ExtensionBlockerResponseDTO entityToDto(ExtensionBlocker entity) {
+    private ExtensionBlockerResponseDTO entityToDto(ExtensionBlocker entity) {
         return new ExtensionBlockerResponseDTO(entity.getName(), entity.getType(), entity.isBanned());
     }
 }
