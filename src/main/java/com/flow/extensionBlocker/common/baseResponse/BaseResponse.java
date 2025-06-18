@@ -1,10 +1,10 @@
 package com.flow.extensionBlocker.common.baseResponse;
 
 public class BaseResponse<T> {
-    private boolean isSuccess;
-    private int code;
-    private String message;
-    private T result;
+    private final boolean isSuccess;
+    private final int code;
+    private final String message;
+    private final T result;
 
     //요청 성공 시
     public BaseResponse(T result) {
