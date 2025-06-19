@@ -33,7 +33,7 @@ public class ExtensionBlockerServiceTest {
     @BeforeEach
     public void setUp() {
         exeDto = ExtensionBlockerRequestDTO.builder()
-                .name("exe")
+                .name("uniquedata")
                 .type(ExtensionType.CUSTOM)
                 .build();
     }
@@ -54,7 +54,7 @@ public class ExtensionBlockerServiceTest {
     public void extensionNameToLowerCase() throws Exception {
         //given
         exeDto = ExtensionBlockerRequestDTO.builder()
-                .name("ExE")
+                .name("UNIquedata")
                 .type(ExtensionType.CUSTOM)
                 .build();
 
@@ -62,7 +62,7 @@ public class ExtensionBlockerServiceTest {
         ExtensionBlockerResponseDTO extension = service.createExtension(exeDto);
 
         //then
-        assertThat(extension.getName()).isEqualTo("exe");
+        assertThat(extension.getName()).isEqualTo("uniquedata");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ExtensionBlockerServiceTest {
         ExtensionBlockerResponseDTO result = service.createExtension(exeDto);
 
         // then
-        assertThat(result.getName()).isEqualTo("exe");
+        assertThat(result.getName()).isEqualTo("uniquedata");
         assertThat(result.isBanned()).isTrue();
     }
     
@@ -85,7 +85,9 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("isBanned가 200개면 더 이상 등록안됨")
     public void registered200ExtensionsTheyAreNoLongerRegistered() throws Exception {
         //given
-        IntStream.range(0, 200).forEach(i -> {
+        int curSize = service.selectAllCustomExtension().size();
+
+        IntStream.range(0, 200 - curSize).forEach(i -> {
             ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
                     .name("exe" + i)
                     .type(ExtensionType.CUSTOM)
@@ -224,6 +226,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("모든 커스텀 extensionList 조회")
     public void findAllCustomExtensionBlocker() throws Exception {
         //given
+        int beforeSize = service.selectAllCustomExtension().size();
         IntStream.range(0, 10).forEach(i -> {
             ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
                     .name("exe" + i)
@@ -236,6 +239,6 @@ public class ExtensionBlockerServiceTest {
         List<ExtensionBlockerResponseDTO> extensionList = service.selectAllCustomExtension();
 
         //then
-        assertThat(extensionList.size()).isEqualTo(10);
+        assertThat(extensionList.size()).isEqualTo(beforeSize + 10);
     }
 }
