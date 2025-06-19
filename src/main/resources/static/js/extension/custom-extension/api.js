@@ -6,11 +6,14 @@ export function addCustomExtension(extName) {
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify({ name: extName, type: "CUSTOM"}),
-    success: function (data) {
-      console.log(data);
-    },
-    error: function (err) {
-      console.log(err)
-    },
   });
+}
+
+export function deleteCustomExtension(extName) {
+  return $.ajax({
+    url: `${API_PATH}/custom/${extName}`,
+    method: "DELETE",
+    contentType: "application/json",
+    data: JSON.stringify({name: extName})
+  })
 }
