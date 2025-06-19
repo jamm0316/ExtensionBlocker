@@ -88,6 +88,14 @@ public class ExtensionBlockerService {
         return extensionList;
     }
 
+    public List<ExtensionBlockerResponseDTO> selectAllFixedExtensionWithBanned() {
+        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllFixedExtension();
+        if (extensionList.size() == 0) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
+        }
+        return extensionList;
+    }
+
     private ExtensionBlocker dtoToEntity(ExtensionBlockerRequestDTO requestDTO) {
         return modelMapper.map(requestDTO, ExtensionBlocker.class);
     }

@@ -14,13 +14,23 @@ public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlock
 
     @Query("""
             select new com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO (
-                  e.name, e.type, e.isBanned          
+                  e.name, e.type, e.isBanned
                 )
             from ExtensionBlocker e
             where e.type = com.flow.extensionBlocker.domain.ExtensionType.CUSTOM
                 and e.isBanned = true
             """)
     List<ExtensionBlockerResponseDTO> findAllCustomExtension();
+
+    @Query("""
+            select new com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO (
+                  e.name, e.type, e.isBanned
+                )
+            from ExtensionBlocker e
+            where e.type = com.flow.extensionBlocker.domain.ExtensionType.FIXED
+                and e.isBanned = true
+            """)
+    List<ExtensionBlockerResponseDTO> findAllFixedExtension();
 
     long countByIsBannedTrue();
 }
