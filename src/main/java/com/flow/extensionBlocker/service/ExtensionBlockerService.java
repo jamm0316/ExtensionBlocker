@@ -64,6 +64,14 @@ public class ExtensionBlockerService {
     }
 
     @Transactional
+    public ExtensionBlockerResponseDTO toggleExtensionBan(String name) {
+        ExtensionBlocker entity = repository.findByName(name);
+        if (entity.isBanned()) entity.setBanned(false);
+        else entity.setBanned(true);
+        return entityToDto(entity);
+    }
+
+    @Transactional
     public void deleteExtension(String name) {
         ExtensionBlocker entity = repository.findByName(name);
         if (entity == null) {
