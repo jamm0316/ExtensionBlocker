@@ -22,8 +22,13 @@ public class ExtensionBlockerAPIController {
 
     @DeleteMapping("/custom/{name}")
     public BaseResponse<Object> deleteExtension(@PathVariable String name) {
-        System.out.println("컨트롤러에 들어옴");
         service.deleteExtension(name);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @PutMapping("/extension/{name}/ban/toggle")
+    public BaseResponse<Object> toggleExtensionBan(@PathVariable String name) {
+        ExtensionBlockerResponseDTO toggledExtensionBan = service.toggleExtensionBan(name);
+        return new BaseResponse<>(toggledExtensionBan);
     }
 }

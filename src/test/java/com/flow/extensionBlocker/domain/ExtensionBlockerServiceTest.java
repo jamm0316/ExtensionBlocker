@@ -241,4 +241,19 @@ public class ExtensionBlockerServiceTest {
         //then
         assertThat(extensionList.size()).isEqualTo(beforeSize + 10);
     }
+
+    @Test
+    @DisplayName("기존 확장자의 수정 요청이 들어오면 토글형식으로 isbanned을 바꾼다.")
+    public void toggleExtensionBan() throws Exception {
+        //given
+        ExtensionBlockerResponseDTO extension = service.createExtension(exeDto);
+
+
+        //when
+        ExtensionBlockerResponseDTO result = service.toggleExtensionBan(exeDto.getName());
+        System.out.println("after: " + extension.isBanned());
+
+        //then
+        assertThat(result.isBanned()).isFalse();
+    }
 }
