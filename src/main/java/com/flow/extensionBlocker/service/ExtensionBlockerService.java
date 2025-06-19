@@ -24,6 +24,7 @@ public class ExtensionBlockerService {
     @Autowired
     ExtensionBlockerRepository repository;
 
+    @Transactional
     public ExtensionBlockerResponseDTO createExtension(ExtensionBlockerRequestDTO extensionRequestDTO) {
         String lowerCaseName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
         extensionRequestDTO.setName(lowerCaseName);
