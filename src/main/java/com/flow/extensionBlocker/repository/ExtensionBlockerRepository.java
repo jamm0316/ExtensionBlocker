@@ -28,7 +28,7 @@ public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlock
                 )
             from ExtensionBlocker e
             where e.type = com.flow.extensionBlocker.domain.ExtensionType.FIXED
-                and e.isBanned = true
+            order by e.name
             """)
     List<ExtensionBlockerResponseDTO> findAllFixedExtension();
 
