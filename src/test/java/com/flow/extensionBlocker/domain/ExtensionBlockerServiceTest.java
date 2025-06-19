@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -219,5 +220,22 @@ public class ExtensionBlockerServiceTest {
         assertThat(repository.findByName(exeDto.getName())).isNull();
     }
 
+    @Test
+    @DisplayName("모든 커스텀 extensionList 조회")
+    public void findAllCustomExtensionBlocker() throws Exception {
+        //given
+        IntStream.range(0, 10).forEach(i -> {
+            ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
+                    .name("exe" + i)
+                    .type(ExtensionType.CUSTOM)
+                    .build();
+            service.createExtension(build);
+        });
 
+        //when
+        List<ExtensionBlockerResponseDTO> extensionList = service.selectAllCustomExtension();
+
+        //then
+        assertThat(extensionList.size()).isEqualTo(10);
+    }
 }

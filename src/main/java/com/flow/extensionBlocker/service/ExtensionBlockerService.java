@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -76,15 +77,13 @@ public class ExtensionBlockerService {
         repository.delete(entity);
     }
 
-    /*
-    public ExtensionBlockerResponseDTO selectExtensionByName(String name) {
-        ExtensionBlocker entity = repository.findByName(name);
-        if (entity == null) {
+    public List<ExtensionBlockerResponseDTO> selectAllCustomExtension() {
+        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllCustomExtension();
+        if (extensionList.size() == 0) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
         }
-        return entityToDto(entity);
+        return extensionList;
     }
-    */
 
     private ExtensionBlocker dtoToEntity(ExtensionBlockerRequestDTO requestDTO) {
         return modelMapper.map(requestDTO, ExtensionBlocker.class);
