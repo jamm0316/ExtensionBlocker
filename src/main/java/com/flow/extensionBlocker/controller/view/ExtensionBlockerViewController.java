@@ -1,14 +1,23 @@
 package com.flow.extensionBlocker.controller.view;
 
+import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
+import com.flow.extensionBlocker.service.ExtensionBlockerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class ExtensionBlockerViewController {
-    @GetMapping("hello")
+    @Autowired
+    ExtensionBlockerService service;
+
+    @GetMapping("extension/blocker")
     public String hello(Model model) {
-        model.addAttribute("name", "evan");
-        return "hello";
+        List<ExtensionBlockerResponseDTO> extensionList = service.selectAllCustomExtension();
+        model.addAttribute("extensionList", "extensionList");
+        return "index";
     }
 }
