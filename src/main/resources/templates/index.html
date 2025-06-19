@@ -30,7 +30,7 @@
     <button class="btn btn-primary" type="submit" id="custom-add-btn">+추가</button>
   </div>
   <div class="mb-2 text-muted">
-    <span id="custom-count">0/200</span>
+    <span id="custom-count" th:text="${customExtensionList.size()} + '/200'">0/200</span>
   </div>
 
   <div class="d-flex flex-wrap gap-2" id="custom-list">
