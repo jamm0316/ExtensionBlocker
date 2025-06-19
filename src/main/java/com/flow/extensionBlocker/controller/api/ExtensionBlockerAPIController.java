@@ -1,4 +1,4 @@
-package com.flow.extensionBlocker.controller;
+package com.flow.extensionBlocker.controller.api;
 
 import com.flow.extensionBlocker.common.baseResponse.BaseResponse;
 import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/extension/")
-public class ExtensionBlockerController {
+public class ExtensionBlockerAPIController {
     @Autowired
     ExtensionBlockerService extensionBlockerService;
 
