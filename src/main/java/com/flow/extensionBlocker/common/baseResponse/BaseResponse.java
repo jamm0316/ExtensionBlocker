@@ -1,10 +1,15 @@
 package com.flow.extensionBlocker.common.baseResponse;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class BaseResponse<T> {
-    private final boolean isSuccess;
-    private final int code;
-    private final String message;
-    private final T result;
+    private boolean isSuccess;
+    private int code;
+    private String message;
+    private T result;
 
     //요청 성공 시
     public BaseResponse(T result) {
