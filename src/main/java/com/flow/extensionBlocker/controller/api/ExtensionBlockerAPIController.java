@@ -26,7 +26,7 @@ public class ExtensionBlockerAPIController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
-    @PutMapping("/extension/{name}/ban/toggle")
+    @PatchMapping("/{name}/ban/toggle")
     public BaseResponse<Object> toggleExtensionBan(@PathVariable String name) {
         ExtensionBlockerResponseDTO toggledExtensionBan = service.toggleExtensionBan(name);
         return new BaseResponse<>(toggledExtensionBan);
