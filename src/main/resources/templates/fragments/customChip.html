@@ -1,0 +1,9 @@
+<div th:fragment="customChip(extName)">
+  <div class="badge bg-secondary rounded-pill px-3 py-2" id="chip-list">
+    <span class="blocked-custom-extension-name" th:text="${extName}"></span>
+    <button type="button"
+            class="btn-close btn-close-white ms-2 remove-btn"
+            th:attr="data-name=${extName}"
+            aria-label="Remove"></button>
+  </div>
+</div>
