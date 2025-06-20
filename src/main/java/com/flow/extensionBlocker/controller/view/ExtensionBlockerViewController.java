@@ -14,7 +14,7 @@ public class ExtensionBlockerViewController {
     @Autowired
     ExtensionBlockerService service;
 
-    @GetMapping("extension/blocker")
+    @GetMapping("/")
     public String hello(Model model) {
         List<ExtensionBlockerResponseDTO> customExtensionList = service.selectAllCustomExtensionWithBanned();
         List<ExtensionBlockerResponseDTO> fixedExtensionList = service.selectAllFixedExtensionWithBanned();
