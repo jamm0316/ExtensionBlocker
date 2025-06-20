@@ -228,4 +228,30 @@ public class ExtensionBlockerServiceTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.NOT_FIXED_EXTENSION.getMessage());
     }
+
+    @Test
+    @DisplayName("영소문자, 숫자를 제외한 문자가 들어오면 예외를 던진다")
+    public void validationExp() throws Exception {
+        //given
+        ExtensionBlockerDTO sample1 = ExtensionBlockerDTO.builder()
+                .name("확장자")
+                .build();
+        ExtensionBlockerDTO sample2 = ExtensionBlockerDTO.builder()
+                .name("unique.sdf")
+                .build();
+        ExtensionBlockerDTO sample3 = ExtensionBlockerDTO.builder()
+                .name("unique@!")
+                .build();
+
+        //then
+        assertThatThrownBy(() -> service.registerExtension(sample1))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
+        assertThatThrownBy(() -> service.registerExtension(sample2))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
+        assertThatThrownBy(() -> service.registerExtension(sample3))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
+    }
 }
