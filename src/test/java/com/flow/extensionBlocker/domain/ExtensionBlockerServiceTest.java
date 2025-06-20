@@ -85,7 +85,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("isBanned가 200개면 더 이상 등록안됨")
     public void registered200ExtensionsTheyAreNoLongerRegistered() throws Exception {
         //given
-        int curSize = service.selectAllCustomExtension().size();
+        int curSize = service.selectAllCustomExtensionWithBanned().size();
 
         IntStream.range(0, 200 - curSize).forEach(i -> {
             ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
@@ -226,7 +226,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("모든 커스텀 extensionList 조회")
     public void findAllCustomExtensionBlocker() throws Exception {
         //given
-        int beforeSize = service.selectAllCustomExtension().size();
+        int beforeSize = service.selectAllCustomExtensionWithBanned().size();
         IntStream.range(0, 10).forEach(i -> {
             ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
                     .name("exe" + i)
@@ -236,7 +236,7 @@ public class ExtensionBlockerServiceTest {
         });
 
         //when
-        List<ExtensionBlockerResponseDTO> extensionList = service.selectAllCustomExtension();
+        List<ExtensionBlockerResponseDTO> extensionList = service.selectAllCustomExtensionWithBanned();
 
         //then
         assertThat(extensionList.size()).isEqualTo(beforeSize + 10);

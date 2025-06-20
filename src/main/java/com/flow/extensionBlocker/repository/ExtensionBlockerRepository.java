@@ -20,7 +20,7 @@ public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlock
             where e.type = com.flow.extensionBlocker.domain.ExtensionType.CUSTOM
                 and e.isBanned = true
             """)
-    List<ExtensionBlockerResponseDTO> findAllCustomExtension();
+    List<ExtensionBlockerResponseDTO> findAllCustomExtensionWithBanned();
 
     @Query("""
             select new com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO (
@@ -30,7 +30,7 @@ public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlock
             where e.type = com.flow.extensionBlocker.domain.ExtensionType.FIXED
             order by e.name
             """)
-    List<ExtensionBlockerResponseDTO> findAllFixedExtension();
+    List<ExtensionBlockerResponseDTO> findAllFixedExtensionWithBanned();
 
     long countByIsBannedTrue();
 }
