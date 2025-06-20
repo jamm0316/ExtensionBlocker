@@ -88,8 +88,8 @@ public class ExtensionBlockerService {
         repository.delete(entity);
     }
 
-    public List<ExtensionBlockerResponseDTO> selectAllCustomExtension() {
-        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllCustomExtension();
+    public List<ExtensionBlockerResponseDTO> selectAllCustomExtensionWithBanned() {
+        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllCustomExtensionWithBanned();
         if (extensionList.size() == 0) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
         }
@@ -97,7 +97,7 @@ public class ExtensionBlockerService {
     }
 
     public List<ExtensionBlockerResponseDTO> selectAllFixedExtensionWithBanned() {
-        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllFixedExtension();
+        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllFixedExtensionWithBanned();
         if (extensionList.size() == 0) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
         }

@@ -16,7 +16,7 @@ public class ExtensionBlockerViewController {
 
     @GetMapping("extension/blocker")
     public String hello(Model model) {
-        List<ExtensionBlockerResponseDTO> customExtensionList = service.selectAllCustomExtension();
+        List<ExtensionBlockerResponseDTO> customExtensionList = service.selectAllCustomExtensionWithBanned();
         List<ExtensionBlockerResponseDTO> fixedExtensionList = service.selectAllFixedExtensionWithBanned();
         model.addAttribute("customExtensionList", customExtensionList);
         model.addAttribute("fixedExtensionList", fixedExtensionList);
