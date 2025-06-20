@@ -90,6 +90,7 @@ public class ExtensionBlockerService {
         entity.setBanned(false);
     }
 
+    @Transactional
     public void deleteForceExtension(String name) {
         ExtensionBlocker entity = repository.findByName(name);
         if (entity == null) {
