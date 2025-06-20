@@ -40,7 +40,7 @@ public class ExtensionBlockerService {
             return entityToDto(existing);
         }
 
-        if (repository.countByIsBannedTrue() == 200) {
+        if (repository.findAllCustomExtensionWithBanned().size() == 200) {
             throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
         }
 
