@@ -4,7 +4,7 @@
 - ExtensionBlocker는 관리자가 허용하지 않은 파일 확장자를 등록 및 관리하여, 사용자로부터의 파일 업로드를 제어할 수 있는 보안 유틸리티입니다.
 - 고정 확장자 관리 및 커스텀 확장자 등록/삭제가 가능하며, 최대 200개까지 차단 확장자를 등록할 수 있습니다.
 
-<hr>
+<br>
 
 ## 🛠 Tech Stack
 - Frontend: Thymeleaf, jQuery, Bootstrap 5
@@ -12,13 +12,13 @@
 - Database: PostgreSQL
 - Infra: AWS Elastic Beanstalk
 
-<hr>
+<br>
 
 ## 🧱 Architecture
 > 전체 구조: Controller - Service - Repository 레이어로 구성된 전형적인 Spring MVC 아키텍처.
 > 모든 예외는 GlobalControllerAdvice를 통해 처리되며, 확장자 등록/삭제 로직에 대한 유효성 검증이 Service 단에서 수행됨.
 
-<hr>
+<br>
 
 ## 🧪 주요 기능
 <h3>✅ 주요 기능</h3>
@@ -49,7 +49,7 @@
   </tbody>
 </table>
 
-<hr>
+<br>
 
 ## 🧭 개발 환경
 - IDE: IntelliJ IDEA
@@ -57,7 +57,7 @@
 - OS: macOS, Ubuntu (EC2 기반)
 - 배포: Elastic Beanstalk (Nginx 설정 포함)
 
-<hr>
+<br>
 
 ## 🖥️ UI 화면
 <img width="359" alt="image" src="https://github.com/user-attachments/assets/9528b886-f7f2-4e0b-8f62-1072b173289a" />
@@ -77,7 +77,7 @@
 ### 🧪 예외 처리
 	•	모든 예외는 BaseException + GlobalControllerAdvice로 일관된 형식으로 응답
 
-<hr>
+<br>
 
 ## 🔐 API 명세
 <h3>📡 API 명세</h3>
@@ -109,7 +109,7 @@
 </table>
 > 모든 요청/응답은 BaseResponse<T> 형태로 반환됩니다.
   
-<hr>
+<br>
 
 ## DB 구조
 <img width="203" alt="image" src="https://github.com/user-attachments/assets/0b86587a-b04c-49c5-b75c-d686b561bb9b" />
@@ -128,7 +128,7 @@
   );
 </details>
   
-<hr>
+<br>
 
 ## 📁 디렉토리 구조
 <details>
@@ -204,7 +204,7 @@ extensionBlocker
   </pre>
 </details>
 
-<hr>
+<br>
 
 ## 🏃‍♂️ 실행 방법
 ```bash
