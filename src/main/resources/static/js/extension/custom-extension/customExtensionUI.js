@@ -36,14 +36,15 @@ function isCustomExtensionDuplicate(ext) {
 }
 
 function focusIfFixedExtension(ext) {
+  const fixedExtensionList = $('.form-check-input');
   const existingFixedExt = new Set(
-    $('.form-check-input').map(function () {
+    fixedExtensionList.map(function () {
       return sanitize($(this).data("name"));
     }).get()
   );
 
   if (existingFixedExt.has(ext)) {
-    $('.form-check-input').each(function () {
+    fixedExtensionList.each(function () {
       if (sanitize($(this).data("name")) === ext) {
         $(this).focus();
       }
