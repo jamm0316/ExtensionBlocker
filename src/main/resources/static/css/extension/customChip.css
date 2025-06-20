@@ -1,0 +1,8 @@
+#custom-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#custom-list .badge {
+  margin: 8px;
+}
