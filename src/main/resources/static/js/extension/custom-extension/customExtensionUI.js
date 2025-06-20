@@ -1,5 +1,5 @@
-import {addCustomExtension, deleteCustomExtension} from "/js/extension/custom-extension/api.js";
-import {sanitize, validateExtension} from "/js/extension/custom-extension/service.js";
+import {addCustomExtension, deleteCustomExtension} from "/js/extension/custom-extension/customExtension.api.js";
+import {sanitize, validateExtension} from "/js/extension/common/utils.js";
 
 function validationAndAlert(ext, count) {
   const {valid, message} = validateExtension(ext, count);
