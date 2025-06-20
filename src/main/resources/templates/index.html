@@ -17,7 +17,7 @@
     <h4 class="mb-3">고정 확장자</h4>
     <div class="mb-4" id="fixed-extension">
     <span th:each="ext : ${fixedExtensionList}">
-      <span th:replace="/fragments/fixedExtensionCheckBox :: fixedExtensionCheckBox(${ext})"></span>
+      <span th:replace="fragments/fixedExtensionCheckBox :: fixedExtensionCheckBox(${ext})"></span>
     </span>
     </div>
   </div>
@@ -25,8 +25,8 @@
   <div class="custom-extension-intput-section">
     <h4 class="mb-3">커스텀 확장자</h4>
     <div class="input-group mb-3 w-50">
-      <div th:insert="/inputs/customExtensionInput :: inputBox"></div>
-      <div th:insert="/buttons/customExtensionAddButton :: addButton"></div>
+      <div th:insert="inputs/customExtensionInput :: inputBox"></div>
+      <div th:insert="buttons/customExtensionAddButton :: addButton"></div>
     </div>
   </div>
 
