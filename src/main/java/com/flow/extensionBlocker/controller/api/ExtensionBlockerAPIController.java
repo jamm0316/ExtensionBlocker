@@ -16,11 +16,11 @@ public class ExtensionBlockerAPIController {
     ExtensionBlockerService service;
 
     @PostMapping("/custom")
-    public BaseResponse<Object> createExtension(@RequestBody RequestDTO requestDTO) {
+    public BaseResponse<Object> registerExtension(@RequestBody RequestDTO requestDTO) {
         ExtensionBlockerDTO extensionBlockerDTO = ExtensionBlockerDTO.builder()
                 .name(requestDTO.getName())
                 .build();
-        ExtensionBlockerResponseDTO extension = service.createExtension(extensionBlockerDTO);
+        ExtensionBlockerResponseDTO extension = service.registerExtension(extensionBlockerDTO);
         return new BaseResponse<>(extension);
     }
 

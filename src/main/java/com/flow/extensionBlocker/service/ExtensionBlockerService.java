@@ -3,6 +3,7 @@ package com.flow.extensionBlocker.service;
 import com.flow.extensionBlocker.common.baseException.BaseException;
 import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
 import com.flow.extensionBlocker.domain.ExtensionBlocker;
+import com.flow.extensionBlocker.domain.ExtensionType;
 import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.repository.ExtensionBlockerRepository;
@@ -25,47 +26,55 @@ public class ExtensionBlockerService {
     ExtensionBlockerRepository repository;
 
     @Transactional
-    public ExtensionBlockerResponseDTO createExtension(ExtensionBlockerDTO extensionBlockerDTO) {
-        extensionBlockerDTO.setName(extensionBlockerDTO.getName().toLowerCase(Locale.ROOT));
-        ExtensionBlocker existing = repository.findByName(extensionBlockerDTO.getName());
+    public ExtensionBlockerResponseDTO registerExtension(ExtensionBlockerDTO extensionRequestDTO) {
+        String lowerCaseName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
+        extensionRequestDTO.setName(lowerCaseName);
 
+        if (isPreviouslyDeleted(lowerCaseName)) {
+            return restoreExtension(lowerCaseName);
+        } else {
+            return createNewExtension(extensionRequestDTO);
+        }
+    }
+
+    private boolean isPreviouslyDeleted(String name) {
+        ExtensionBlocker existing = repository.findByName(name);
+        if (existing != null) {
+            if (!existing.isBanned()) {  //이미 존재하는데 논리삭제 됐으면 true 반환
+                return true;
+            } else {  //이미 존재하며, 등록되어있는 상태라면 중복예외 반환
+                throw new BaseException(BaseResponseStatus.EXTENSION_NAME_DUPLICATED);
+            }
+        }
+        return false;
+    }
+
+    @Transactional
+    public ExtensionBlockerResponseDTO restoreExtension(String name) {
+        ExtensionBlocker entity = repository.findByName(name);
+        entity.setBanned(true);
+        return entityToDto(entity);
+    }
+
+    @Transactional
+    public ExtensionBlockerResponseDTO createNewExtension(ExtensionBlockerDTO extensionBlockerDTO) {
         if (extensionBlockerDTO.getName().length() > 20) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
         }
 
-        if (existing != null && !existing.isBanned()) {
-            existing.setBanned(true);
-            return entityToDto(existing);
-        }
-
-        if (repository.findAllCustomExtensionWithBanned().size() == 200) {
+        if (repository.findAllCustomExtensionWithBanned().size() >= 200) {
             throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
         }
 
-        ExtensionBlocker entity = repository.save(dtoToEntity(extensionBlockerDTO));
-        return entityToDto(entity);
-    }
-
-    public ExtensionBlockerResponseDTO updateExtension(ExtensionBlockerDTO extensionRequestDTO) {
-        ExtensionBlocker entity = repository.findByName(extensionRequestDTO.getName());
-        if (entity == null) throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
-
-        String newName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
-        ExtensionBlocker duplicate = repository.findByName(newName);
-        if (duplicate != null && duplicate.getId() != entity.getId()) {
-            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_DUPLICATED);
-        }
-
-        entity.setName(extensionRequestDTO.getName().toLowerCase(Locale.ROOT));
-        entity.setBanned(extensionRequestDTO.isBanned());
-        return entityToDto(entity);
+        ExtensionBlocker savedEntity = repository.save(dtoToEntity(extensionBlockerDTO));
+        return entityToDto(savedEntity);
     }
 
     @Transactional
     public ExtensionBlockerResponseDTO toggleExtensionBan(String name) {
         ExtensionBlocker entity = repository.findByName(name);
-        if (entity.isBanned()) entity.setBanned(false);
-        else entity.setBanned(true);
+        if (entity.getType() != ExtensionType.FIXED) throw new BaseException(BaseResponseStatus.NOT_FIXED_EXTENSION);
+        entity.setBanned(!entity.isBanned());
         return entityToDto(entity);
     }
 
