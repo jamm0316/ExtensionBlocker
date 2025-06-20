@@ -5,7 +5,7 @@ export function addCustomExtension(extName) {
     url: `${API_PATH}/custom`,
     method: "POST",
     contentType: "application/json",
-    data: JSON.stringify({ name: extName, type: "CUSTOM"}),
+    data: JSON.stringify({ name: extName }),
   });
 }
 
@@ -14,6 +14,6 @@ export function deleteCustomExtension(extName) {
     url: `${API_PATH}/custom/${extName}`,
     method: "DELETE",
     contentType: "application/json",
-    data: JSON.stringify({name: extName})
+    data: JSON.stringify({ name: extName })
   })
 }

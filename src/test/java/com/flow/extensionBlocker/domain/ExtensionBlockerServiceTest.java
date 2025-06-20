@@ -2,7 +2,7 @@ package com.flow.extensionBlocker.domain;
 
 import com.flow.extensionBlocker.common.baseException.BaseException;
 import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
-import com.flow.extensionBlocker.dto.ExtensionBlockerRequestDTO;
+import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.repository.ExtensionBlockerRepository;
 import com.flow.extensionBlocker.service.ExtensionBlockerService;
@@ -28,11 +28,11 @@ public class ExtensionBlockerServiceTest {
     @Autowired
     ExtensionBlockerRepository repository;
 
-    ExtensionBlockerRequestDTO exeDto;
+    ExtensionBlockerDTO exeDto;
 
     @BeforeEach
     public void setUp() {
-        exeDto = ExtensionBlockerRequestDTO.builder()
+        exeDto = ExtensionBlockerDTO.builder()
                 .name("uniquedata")
                 .type(ExtensionType.CUSTOM)
                 .build();
@@ -53,7 +53,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("확장자 명은 무조건 소문자로 저장함")
     public void extensionNameToLowerCase() throws Exception {
         //given
-        exeDto = ExtensionBlockerRequestDTO.builder()
+        exeDto = ExtensionBlockerDTO.builder()
                 .name("UNIquedata")
                 .type(ExtensionType.CUSTOM)
                 .build();
@@ -87,7 +87,7 @@ public class ExtensionBlockerServiceTest {
         //given
         int curSize = service.selectAllCustomExtensionWithBanned().size();
         IntStream.range(0, 200 - curSize).forEach(i -> {
-            ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
+            ExtensionBlockerDTO build = ExtensionBlockerDTO.builder()
                     .name("exe" + i)
                     .type(ExtensionType.CUSTOM)
                     .build();
@@ -95,7 +95,7 @@ public class ExtensionBlockerServiceTest {
         });
 
         //when
-        ExtensionBlockerRequestDTO overflow = ExtensionBlockerRequestDTO.builder()
+        ExtensionBlockerDTO overflow = ExtensionBlockerDTO.builder()
                 .name("overflow")
                 .type(ExtensionType.CUSTOM)
                 .build();
@@ -110,7 +110,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("확장자 이름은 최대 20자리까지 가능.")
     public void extensionNameCanBeUpTo20Characters() throws Exception {
         //given
-        ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
+        ExtensionBlockerDTO build = ExtensionBlockerDTO.builder()
                 .name("asdfgasdfgasdfgasdfga")
                 .build();
 
@@ -128,8 +128,7 @@ public class ExtensionBlockerServiceTest {
 
         ExtensionBlocker entity = repository.findByName(exeDto.getName());
 
-        ExtensionBlockerRequestDTO newDto = ExtensionBlockerRequestDTO.builder()
-                .id(entity.getId())
+        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
                 .name("avi")
                 .type(entity.getType())
                 .isBanned(false)
@@ -151,8 +150,7 @@ public class ExtensionBlockerServiceTest {
 
         ExtensionBlocker entity = repository.findByName(exeDto.getName());
 
-        ExtensionBlockerRequestDTO newDto = ExtensionBlockerRequestDTO.builder()
-                .id(entity.getId())
+        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
                 .name("AVI")
                 .type(entity.getType())
                 .isBanned(false)
@@ -171,7 +169,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("수정하려는 확장자가 이미 존재하는 확장자라면 확장자 중복 예외를 던진다.")
     public void extensionDuplicateExceptionIsThrown() throws Exception {
         //given
-        ExtensionBlockerRequestDTO aviDto = ExtensionBlockerRequestDTO.builder()
+        ExtensionBlockerDTO aviDto = ExtensionBlockerDTO.builder()
                 .name("avi")
                 .type(ExtensionType.CUSTOM)
                 .isBanned(false)
@@ -181,8 +179,7 @@ public class ExtensionBlockerServiceTest {
 
         ExtensionBlocker entity = repository.findByName(exeDto.getName());
 
-        ExtensionBlockerRequestDTO newDto = ExtensionBlockerRequestDTO.builder()
-                .id(entity.getId())
+        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
                 .name("avi")
                 .type(entity.getType())
                 .isBanned(false)
@@ -227,7 +224,7 @@ public class ExtensionBlockerServiceTest {
         //given
         int beforeSize = service.selectAllCustomExtensionWithBanned().size();
         IntStream.range(0, 10).forEach(i -> {
-            ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
+            ExtensionBlockerDTO build = ExtensionBlockerDTO.builder()
                     .name("exe" + i)
                     .type(ExtensionType.CUSTOM)
                     .build();
