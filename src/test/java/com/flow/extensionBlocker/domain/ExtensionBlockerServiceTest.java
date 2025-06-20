@@ -39,13 +39,12 @@ public class ExtensionBlockerServiceTest {
     }
 
     @Test
-    @DisplayName("extension등록 시 isBanned은 true로 저장됨")
+    @DisplayName("extension등록 시 isBanned=true, type=CUSTOM으로 저장됨")
     public void createExtension() throws Exception {
-        ExtensionBlockerResponseDTO extension = service.createExtension(exeDto);
+        ExtensionBlockerResponseDTO extension = service.registerExtension(exeDto);
 
         //then
-        assertThat(extension.getName()).isEqualTo(exeDto.getName());
-        assertThat(extension.getType()).isEqualTo(extension.getType());
+        assertThat(extension.getType()).isEqualTo(ExtensionType.CUSTOM);
         assertThat(extension.isBanned()).isTrue();
     }
 
@@ -59,7 +58,7 @@ public class ExtensionBlockerServiceTest {
                 .build();
 
         //when
-        ExtensionBlockerResponseDTO extension = service.createExtension(exeDto);
+        ExtensionBlockerResponseDTO extension = service.registerExtension(exeDto);
 
         //then
         assertThat(extension.getName()).isEqualTo("uniquedata");
@@ -71,10 +70,10 @@ public class ExtensionBlockerServiceTest {
 
         // given
         exeDto.setBanned(false);
-        service.createExtension(exeDto);
+        service.registerExtension(exeDto);
 
         // when
-        ExtensionBlockerResponseDTO result = service.createExtension(exeDto);
+        ExtensionBlockerResponseDTO result = service.registerExtension(exeDto);
 
         // then
         assertThat(result.getName()).isEqualTo("uniquedata");
@@ -82,7 +81,7 @@ public class ExtensionBlockerServiceTest {
     }
     
     @Test
-    @DisplayName("customExtension.isBanned == true가 200개면 더 이상 등록안됨")
+    @DisplayName("customExtension.isBanned >= true가 200개면 더 이상 등록안됨")
     public void registered200ExtensionsTheyAreNoLongerRegistered() throws Exception {
         //given
         int curSize = service.selectAllCustomExtensionWithBanned().size();
@@ -91,7 +90,7 @@ public class ExtensionBlockerServiceTest {
                     .name("exe" + i)
                     .type(ExtensionType.CUSTOM)
                     .build();
-            service.createExtension(build);
+            service.registerExtension(build);
         });
 
         //when
@@ -101,7 +100,7 @@ public class ExtensionBlockerServiceTest {
                 .build();
 
         //then
-        assertThatThrownBy(() -> service.createExtension(overflow))
+        assertThatThrownBy(() -> service.registerExtension(overflow))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED.getMessage());
     }
@@ -115,78 +114,38 @@ public class ExtensionBlockerServiceTest {
                 .build();
 
         //then
-        assertThatThrownBy(() -> service.createExtension(build))
+        assertThatThrownBy(() -> service.registerExtension(build))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED.getMessage());
     }
-    
-    @Test
-    @DisplayName("확장자를 업데이트하면 이름 또는 삭제여부를 바꿀 수 있다.")
-    public void canChangeTheNameOrDeleteIt() throws Exception {
-        //given
-        service.createExtension(exeDto);
-
-        ExtensionBlocker entity = repository.findByName(exeDto.getName());
-
-        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
-                .name("avi")
-                .type(entity.getType())
-                .isBanned(false)
-                .build();
-
-        //when
-        ExtensionBlockerResponseDTO extensionBlockerResponseDTO = service.updateExtension(newDto);
-
-        //then
-        assertThat(extensionBlockerResponseDTO.getName()).isEqualTo("avi");
-        assertThat(extensionBlockerResponseDTO.isBanned()).isFalse();
-    }
 
     @Test
-    @DisplayName("대문자의 수정된 확장자명이 들어오면 소문자로 바꿔준다.")
-    public void uppercaseLettersConvertedToLowercaseLetters() throws Exception {
-        //given
-        service.createExtension(exeDto);
-
-        ExtensionBlocker entity = repository.findByName(exeDto.getName());
-
-        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
-                .name("AVI")
-                .type(entity.getType())
-                .isBanned(false)
-                .build();
-
-        //when
-        ExtensionBlockerResponseDTO extensionBlockerResponseDTO = service.updateExtension(newDto);
-
-        //then
-        assertThat(extensionBlockerResponseDTO.getName()).isEqualTo("avi");
-        assertThat(extensionBlockerResponseDTO.isBanned()).isFalse();
-
-    }
-
-    @Test
-    @DisplayName("수정하려는 확장자가 이미 존재하는 확장자라면 확장자 중복 예외를 던진다.")
-    public void extensionDuplicateExceptionIsThrown() throws Exception {
+    @DisplayName("등록한 확장자기 이미 등록된 커스텀 확장자라면 중복예외를 던짐")
+    public void customExtensionDuplicateExceptionIsThrown() throws Exception {
         //given
         ExtensionBlockerDTO aviDto = ExtensionBlockerDTO.builder()
                 .name("avi")
-                .type(ExtensionType.CUSTOM)
-                .isBanned(false)
                 .build();
-        service.createExtension(exeDto);
-        service.createExtension(aviDto);
-
-        ExtensionBlocker entity = repository.findByName(exeDto.getName());
-
-        ExtensionBlockerDTO newDto = ExtensionBlockerDTO.builder()
-                .name("avi")
-                .type(entity.getType())
-                .isBanned(false)
-                .build();
+        service.registerExtension(aviDto);
 
         //then
-        assertThatThrownBy(() -> service.updateExtension(newDto))
+        assertThatThrownBy(() -> service.registerExtension(aviDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.EXTENSION_NAME_DUPLICATED.getMessage());
+    }
+
+    @Test
+    @DisplayName("등록한 확장자기 이미 등록된 고정 확장자라면 중복예외를 던짐")
+    public void fixedExtensionDuplicateExceptionIsThrown() throws Exception {
+        //given
+        ExtensionBlockerDTO aviDto = ExtensionBlockerDTO.builder()
+                .name("avi")
+                .type(ExtensionType.FIXED)
+                .build();
+        service.registerExtension(aviDto);
+
+        //then
+        assertThatThrownBy(() -> service.registerExtension(aviDto))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.EXTENSION_NAME_DUPLICATED.getMessage());
     }
@@ -195,7 +154,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("확장자 삭제를 누르면 isBanned가 false가 된다.")
     public void deleteExtension() throws Exception {
         //given
-        service.createExtension(exeDto);
+        service.registerExtension(exeDto);
 
         //when
         service.deleteExtension(exeDto.getName());
@@ -209,7 +168,7 @@ public class ExtensionBlockerServiceTest {
     @DisplayName("확장자 영구 삭제를 누르면 확장자가 db에서 삭제 된다.")
     public void deleteForceExtension() throws Exception {
         //given
-        service.createExtension(exeDto);
+        service.registerExtension(exeDto);
 
         //when
         service.deleteForceExtension(exeDto.getName());
@@ -228,7 +187,7 @@ public class ExtensionBlockerServiceTest {
                     .name("exe" + i)
                     .type(ExtensionType.CUSTOM)
                     .build();
-            service.createExtension(build);
+            service.registerExtension(build);
         });
 
         //when
@@ -239,17 +198,34 @@ public class ExtensionBlockerServiceTest {
     }
 
     @Test
-    @DisplayName("기존 확장자의 수정 요청이 들어오면 토글형식으로 isbanned을 바꾼다.")
+    @DisplayName("고정 확장자의 수정 요청이 들어오면 토글형식으로 isbanned을 바꾼다.")
     public void toggleExtensionBan() throws Exception {
         //given
-        ExtensionBlockerResponseDTO extension = service.createExtension(exeDto);
-
+        ExtensionBlockerDTO fixedExt = ExtensionBlockerDTO.builder()
+                .name("smpleFixedExt")
+                .type(ExtensionType.FIXED)
+                .build();
+        ExtensionBlockerResponseDTO extension = service.registerExtension(fixedExt);
 
         //when
-        ExtensionBlockerResponseDTO result = service.toggleExtensionBan(exeDto.getName());
-        System.out.println("after: " + extension.isBanned());
+        ExtensionBlockerResponseDTO result = service.toggleExtensionBan(extension.getName());
 
         //then
         assertThat(result.isBanned()).isFalse();
+    }
+
+    @Test
+    @DisplayName("커스텀 확장자가 toggleExtensionBan로 들어오면 예외를 던진다.")
+    public void toggleCustomExtensionBanException() throws Exception {
+        //given
+        ExtensionBlockerDTO fixedExt = ExtensionBlockerDTO.builder()
+                .name("smpleFixedExt")
+                .build();
+        ExtensionBlockerResponseDTO extension = service.registerExtension(fixedExt);
+
+        //when
+        assertThatThrownBy(() -> service.toggleExtensionBan(extension.getName()))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.NOT_FIXED_EXTENSION.getMessage());
     }
 }
