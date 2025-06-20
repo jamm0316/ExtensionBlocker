@@ -96,19 +96,11 @@ public class ExtensionBlockerService {
     }
 
     public List<ExtensionBlockerResponseDTO> selectAllCustomExtensionWithBanned() {
-        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllCustomExtensionWithBanned();
-        if (extensionList.size() == 0) {
-            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
-        }
-        return extensionList;
+        return repository.findAllCustomExtensionWithBanned();
     }
 
     public List<ExtensionBlockerResponseDTO> selectAllFixedExtensionWithBanned() {
-        List<ExtensionBlockerResponseDTO> extensionList = repository.findAllFixedExtensionWithBanned();
-        if (extensionList.size() == 0) {
-            throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
-        }
-        return extensionList;
+        return repository.findAllFixedExtensionWithBanned();
     }
 
     private ExtensionBlocker dtoToEntity(ExtensionBlockerDTO requestDTO) {
