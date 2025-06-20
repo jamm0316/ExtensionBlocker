@@ -2,7 +2,7 @@
 **✋허용되지 않은 확장자? 차단!!**
 > 📄 프로젝트 상세 문서는 [📘 Notion 링크 바로가기](https://jamm0316.notion.site/215cda6b86ff80baa4a1c08c1f2868e1#215cda6b86ff804d8e44e2840b05ae8a) 에서 확인할 수 있습니다.
 - ExtensionBlocker는 관리자가 허용하지 않은 파일 확장자를 등록 및 관리하여, 사용자로부터의 파일 업로드를 제어할 수 있는 보안 유틸리티입니다.
-- 고정 확장자 관리 및 커스텀 확장자 등록/삭제가 가능하며, 최대 200개까지 차단 확장자를 등록할 수 있습니다.
+- 고정 확장자 관리 및 커스텀 확장자 등록/삭제가 가능하며, 고정확장자를 제외한 최대 200개까지 커스텀 확장자를 차단할 수 있습니다.
 
 <br>
 
@@ -17,8 +17,10 @@
 ## 🧱 Architecture
 <img width="1230" alt="image" src="https://github.com/user-attachments/assets/1144dfa6-fcb6-4eed-956e-6e790d769d07" />
 
+<br>
+
 > - 전체 구조: Controller - Service - Repository 레이어로 구성된 전형적인 Spring MVC 아키텍처.
-> - 모든 예외는 GlobalControllerAdvice를 통해 처리되며, 확장자 등록/삭제 로직에 대한 유효성 검증이 Service 단에서 수행됨.
+> - 모든 예외는 GlobalExceptionHandler 통해 처리되며, 확장자 등록/삭제 로직에 대한 유효성 검증이 Service 단에서 수행됨.
 
 <br>
 
@@ -56,7 +58,7 @@
 ## 🧭 개발 환경
 - IDE: IntelliJ IDEA
 - JDK: Java 17
-- OS: macOS, Ubuntu (EC2 기반)
+- OS: macOS
 - 배포: Elastic Beanstalk (Nginx 설정 포함)
 
 <br>
@@ -65,19 +67,19 @@
 <img width="359" alt="image" src="https://github.com/user-attachments/assets/9528b886-f7f2-4e0b-8f62-1072b173289a" />
 
 ### ✅ 고정 확장자 관리
-	•	체크된 확장자는 차단 상태, 체크 해제 시 허용 상태
-	•	프론트에서 체크박스 상태로 실시간 반영됨
+	• 체크된 확장자는 차단 상태, 체크 해제 시 허용 상태
+	• 프론트에서 체크박스 상태로 실시간 반영됨
 
 ### ➕ 커스텀 확장자 추가
-	•	중복 불가, 최대 20자 제한, 유효성 검사(소문자+숫자)
-	•	등록 시 자동 소문자 변환
+	• 중복 불가, 최대 20자 제한, 유효성 검사(소문자+숫자)
+	• 등록 시 자동 소문자 변환
 
 ### ❌ 커스텀 확장자 삭제
-	•	삭제 시 DB에서 제거되지 않고 isBanned = false 처리
-	•	삭제 후 자동 새로고침으로 화면 동기화됨
+	• 삭제 시 DB에서 제거되지 않고 isBanned = false 처리
+	• 삭제 후 자동 새로고침으로 화면 동기화됨
 
 ### 🧪 예외 처리
-	•	모든 예외는 BaseException + GlobalControllerAdvice로 일관된 형식으로 응답
+	• 모든 예외는 BaseResponse + BaseResponseStatus 일관된 형식으로 응답
 
 <br>
 
@@ -104,7 +106,7 @@
     </tr>
     <tr>
       <td>DELETE</td>
-      <td><code>api/extensions/custom/{name|</code></td>
+      <td><code>api/extensions/custom/{name}</code></td>
       <td>커스텀 확장자 삭제(논리삭제)</td>
     </tr>
   </tbody>
@@ -137,73 +139,73 @@
 <details>
   <summary>frontend</summary>
   <pre>
-resources
-├── static
-│   ├── css
-│   └── extension
-│   │       └── customChip.css
-│   ├── favicon
-│   │   └── favicon.png
-│   └── js
-│       ├── config
-│       │   └── pathConfig.js
-│       └── extension
-│           ├── common
-│           │   └── utils.js
-│           ├── custom-extension
-│           │   ├── customExtension.api.js
-│           │   ├── customExtensionUI.js
-│           │   └── initCustomExtension.js
-│           └── fixed-extension
-│               ├── fixedExtension.api.js
-│               ├── fixedExtensionUI.js
-│               └── initFixedExtension.js
-└── templates
-    ├── buttons
-    │   └── customExtensionAddButton.html
-    ├── fragments
-    │   ├── customChip.html
-    │   └── fixedExtensionCheckBox.html
-    ├── index.html
-    └── inputs
-        └── customExtensionInput.html
+	resources
+	├── static
+	│   ├── css
+	│   └── extension
+	│   │       └── customChip.css
+	│   ├── favicon
+	│   │   └── favicon.png
+	│   └── js
+	│       ├── config
+	│       │   └── pathConfig.js
+	│       └── extension
+	│           ├── common
+	│           │   └── utils.js
+	│           ├── custom-extension
+	│           │   ├── customExtension.api.js
+	│           │   ├── customExtensionUI.js
+	│           │   └── initCustomExtension.js
+	│           └── fixed-extension
+	│               ├── fixedExtension.api.js
+	│               ├── fixedExtensionUI.js
+	│               └── initFixedExtension.js
+	└── templates
+	    ├── buttons
+	    │   └── customExtensionAddButton.html
+	    ├── fragments
+	    │   ├── customChip.html
+	    │   └── fixedExtensionCheckBox.html
+	    ├── index.html
+	    └── inputs
+		└── customExtensionInput.html
   </pre>
 </details>
 
 <details>
   <summary>backend</summary>
   <pre>
-extensionBlocker
-├── common
-│   ├── baseException
-│   │   ├── BaseException.java
-│   │   └── GlobalExceptionHandler.java
-│   ├── baseResponse
-│   │   ├── BaseResponse.java
-│   │   └── BaseResponseStatus.java
-│   └── BaseTimeEntity.java
-├── config
-│   ├── auditor
-│   │   └── AuditorAwareImpl.java
-│   └── mapper
-│       └── ModelMapperConfig.java
-├── controller
-│   ├── api
-│   │   └── ExtensionBlockerAPIController.java
-│   └── view
-│       └── ExtensionBlockerViewController.java
-├── domain
-│   ├── ExtensionBlocker.java
-│   └── ExtensionType.java
-├── dto
-│   ├── ExtensionBlockerDTO.java
-│   ├── ExtensionBlockerResponseDTO.java
-│   └── RequestDTO.java
-├── ExtensionBlockerApplication.java
-├── repository
-│   └── ExtensionBlockerRepository.java
-└── service
-    └── ExtensionBlockerService.java
+	extensionBlocker
+	├── common
+	│   ├── baseException
+	│   │   ├── BaseException.java
+	│   │   └── GlobalExceptionHandler.java
+	│   ├── baseResponse
+	│   │   ├── BaseResponse.java
+	│   │   └── BaseResponseStatus.java
+	│   └── BaseTimeEntity.java
+	├── config
+	│   ├── auditor
+	│   │   └── AuditorAwareImpl.java
+	│   └── mapper
+	│       └── ModelMapperConfig.java
+	├── controller
+	│   ├── api
+	│   │   └── ExtensionBlockerAPIController.java
+	│   └── view
+	│       └── ExtensionBlockerViewController.java
+	├── domain
+	│   ├── ExtensionBlocker.java
+	│   └── ExtensionType.java
+	├── dto
+	│   ├── ExtensionBlockerDTO.java
+	│   ├── ExtensionBlockerResponseDTO.java
+	│   └── RequestDTO.java
+	├── ExtensionBlockerApplication.java
+	├── repository
+	│   └── ExtensionBlockerRepository.java
+	└── service
+	    └── ExtensionBlockerService.java
   </pre>
 </details>
 
