@@ -2,7 +2,7 @@ package com.flow.extensionBlocker.controller.api;
 
 import com.flow.extensionBlocker.common.baseResponse.BaseResponse;
 import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
-import com.flow.extensionBlocker.dto.ExtensionBlockerRequestDTO;
+import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.service.ExtensionBlockerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,12 @@ public class ExtensionBlockerAPIController {
     @Autowired
     ExtensionBlockerService service;
 
-    @PostMapping("/custom")
-    public BaseResponse<Object> createExtension(@RequestBody ExtensionBlockerRequestDTO extensionRequestDTO) {
-        ExtensionBlockerResponseDTO extension = service.createExtension(extensionRequestDTO);
+    @PostMapping("/custom/{name}")
+    public BaseResponse<Object> createExtension(@PathVariable String name) {
+        ExtensionBlockerDTO extensionBlockerDTO = ExtensionBlockerDTO.builder()
+                .name(name)
+                .build();
+        ExtensionBlockerResponseDTO extension = service.createExtension(extensionBlockerDTO);
         return new BaseResponse<>(extension);
     }
 

@@ -3,7 +3,7 @@ package com.flow.extensionBlocker.service;
 import com.flow.extensionBlocker.common.baseException.BaseException;
 import com.flow.extensionBlocker.common.baseResponse.BaseResponseStatus;
 import com.flow.extensionBlocker.domain.ExtensionBlocker;
-import com.flow.extensionBlocker.dto.ExtensionBlockerRequestDTO;
+import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.repository.ExtensionBlockerRepository;
 import lombok.extern.log4j.Log4j2;
@@ -25,13 +25,11 @@ public class ExtensionBlockerService {
     ExtensionBlockerRepository repository;
 
     @Transactional
-    public ExtensionBlockerResponseDTO createExtension(ExtensionBlockerRequestDTO extensionRequestDTO) {
-        String lowerCaseName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
-        extensionRequestDTO.setName(lowerCaseName);
+    public ExtensionBlockerResponseDTO createExtension(ExtensionBlockerDTO extensionBlockerDTO) {
+        extensionBlockerDTO.setName(extensionBlockerDTO.getName().toLowerCase(Locale.ROOT));
+        ExtensionBlocker existing = repository.findByName(extensionBlockerDTO.getName());
 
-        ExtensionBlocker existing = repository.findByName(lowerCaseName);
-
-        if (extensionRequestDTO.getName().length() > 20) {
+        if (extensionBlockerDTO.getName().length() > 20) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
         }
 
@@ -44,13 +42,13 @@ public class ExtensionBlockerService {
             throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
         }
 
-        ExtensionBlocker entity = repository.save(dtoToEntity(extensionRequestDTO));
+        ExtensionBlocker entity = repository.save(dtoToEntity(extensionBlockerDTO));
         return entityToDto(entity);
     }
 
-    public ExtensionBlockerResponseDTO updateExtension(ExtensionBlockerRequestDTO extensionRequestDTO) {
-        ExtensionBlocker entity = repository.findById(extensionRequestDTO.getId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND));
+    public ExtensionBlockerResponseDTO updateExtension(ExtensionBlockerDTO extensionRequestDTO) {
+        ExtensionBlocker entity = repository.findByName(extensionRequestDTO.getName());
+        if (entity == null) throw new BaseException(BaseResponseStatus.EXTENSION_NOT_FOUND);
 
         String newName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
         ExtensionBlocker duplicate = repository.findByName(newName);
@@ -104,7 +102,7 @@ public class ExtensionBlockerService {
         return extensionList;
     }
 
-    private ExtensionBlocker dtoToEntity(ExtensionBlockerRequestDTO requestDTO) {
+    private ExtensionBlocker dtoToEntity(ExtensionBlockerDTO requestDTO) {
         return modelMapper.map(requestDTO, ExtensionBlocker.class);
     }
 
