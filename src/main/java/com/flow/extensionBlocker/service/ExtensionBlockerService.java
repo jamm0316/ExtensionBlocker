@@ -58,13 +58,16 @@ public class ExtensionBlockerService {
 
     @Transactional
     public ExtensionBlockerResponseDTO createNewExtension(ExtensionBlockerDTO extensionBlockerDTO) {
-        if (extensionBlockerDTO.getName().length() > 20) {
-            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
-        }
+        String name = extensionBlockerDTO.getName();
 
-        if (repository.findAllCustomExtensionWithBanned().size() >= 200) {
-            throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
-        }
+        //1. 정규식 검사
+        if (!name.matches("^[a-z0-9]+$")) throw new BaseException(BaseResponseStatus.INVALID_EXTENSION_NAME);
+
+        //2. 문자 길이 검사
+        if (name.length() > 20) throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
+
+        //3. 최대 갯수 제한
+        if (repository.findAllCustomExtensionWithBanned().size() >= 200) throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
 
         ExtensionBlocker savedEntity = repository.save(dtoToEntity(extensionBlockerDTO));
         return entityToDto(savedEntity);
