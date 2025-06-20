@@ -1,0 +1,10 @@
+<span th:fragment="fixedExtensionCheckBox(ext)">
+  <label class="form-check-label">
+    <input class="form-check-input"
+           type="checkbox"
+           name="fixed"
+           th:attr="data-name=${ext.name}"
+           th:checked="${ext.isBanned}"
+           th:text="${ext.name}">
+  </label>
+</span>
