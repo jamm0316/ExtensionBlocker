@@ -208,8 +208,3 @@
 	    └── ExtensionBlockerService.java
   </pre>
 </details>
-# 서버 실행
-./gradlew bootRun
-```
-
-
