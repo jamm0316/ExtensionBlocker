@@ -82,11 +82,10 @@ public class ExtensionBlockerServiceTest {
     }
     
     @Test
-    @DisplayName("isBanned가 200개면 더 이상 등록안됨")
+    @DisplayName("customExtension.isBanned == true가 200개면 더 이상 등록안됨")
     public void registered200ExtensionsTheyAreNoLongerRegistered() throws Exception {
         //given
         int curSize = service.selectAllCustomExtensionWithBanned().size();
-
         IntStream.range(0, 200 - curSize).forEach(i -> {
             ExtensionBlockerRequestDTO build = ExtensionBlockerRequestDTO.builder()
                     .name("exe" + i)

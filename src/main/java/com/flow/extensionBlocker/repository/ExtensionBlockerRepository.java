@@ -31,6 +31,4 @@ public interface ExtensionBlockerRepository extends JpaRepository<ExtensionBlock
             order by e.name
             """)
     List<ExtensionBlockerResponseDTO> findAllFixedExtensionWithBanned();
-
-    long countByIsBannedTrue();
 }
