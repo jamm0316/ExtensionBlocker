@@ -15,6 +15,8 @@
 <br>
 
 ## 🧱 Architecture
+<img width="1230" alt="image" src="https://github.com/user-attachments/assets/1144dfa6-fcb6-4eed-956e-6e790d769d07" />
+
 > - 전체 구조: Controller - Service - Repository 레이어로 구성된 전형적인 Spring MVC 아키텍처.
 > - 모든 예외는 GlobalControllerAdvice를 통해 처리되며, 확장자 등록/삭제 로직에 대한 유효성 검증이 Service 단에서 수행됨.
 
