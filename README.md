@@ -1,4 +1,4 @@
-# 🧱 ExtensionBlocker
+# 🧱 ExtensionBlocker([🔗 사이트 방문하기](http://extension-blocker-env-1.eba-yyxrjve3.us-east-1.elasticbeanstalk.com/))
 **✋허용되지 않은 확장자? 차단!!**
 > 📄 프로젝트 상세 문서는 [📘 Notion 링크 바로가기](https://jamm0316.notion.site/215cda6b86ff80baa4a1c08c1f2868e1#215cda6b86ff804d8e44e2840b05ae8a) 에서 확인할 수 있습니다.
 - ExtensionBlocker는 관리자가 허용하지 않은 파일 확장자를 등록 및 관리하여, 사용자로부터의 파일 업로드를 제어할 수 있는 보안 유틸리티입니다.
@@ -208,15 +208,6 @@
 	    └── ExtensionBlockerService.java
   </pre>
 </details>
-
-<br>
-
-## 🏃‍♂️ 실행 방법
-```bash
-# 프로젝트 클론
-git clone https://github.com/flow-devs/extension-blocker.git
-cd extension-blocker
-
 # 서버 실행
 ./gradlew bootRun
 ```
