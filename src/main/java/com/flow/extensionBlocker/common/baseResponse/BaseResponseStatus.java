@@ -22,7 +22,8 @@ public enum BaseResponseStatus {
     EXTENSION_NAME_DUPLICATED(false, 2004, "해당 확장자가 이미 존재합니다."),
     NOT_FIXED_EXTENSION(false, 2005, "해당 API는 고정 확장자(FIXED)에만 사용할 수 있습니다."),
     NOT_CUSTOM_EXTENSION(false, 2006, "해당 API는 커스텀 확장자(CUSTOM)에만 사용할 수 있습니다."),
-    INVALID_EXTENSION_NAME(false, 2007, "확장자는 영소문자, 숫자만 입력 가능합니다."),
+    INVALID_EXTENSION_NAME(false, 2007, "확장자는 영소문자 + 숫자만 입력 가능합니다.(숫자만 불가능)"),
+    EXTENSION_NAME_REQUIRED(false, 2008, "확장자 명을 입력하세요."),
 
     /**
      * 4000: Internal Server Error
