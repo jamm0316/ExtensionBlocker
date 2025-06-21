@@ -1,8 +1,10 @@
 package com.flow.extensionBlocker.common.baseResponse;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum BaseResponseStatus {
 
     /**
@@ -32,10 +34,4 @@ public enum BaseResponseStatus {
     private final boolean isSuccess;
     private final int code;
     private final String message;
-
-    BaseResponseStatus(boolean isSuccess, int code, String message) {
-        this.isSuccess = isSuccess;
-        this.code = code;
-        this.message = message;
-    }
 }

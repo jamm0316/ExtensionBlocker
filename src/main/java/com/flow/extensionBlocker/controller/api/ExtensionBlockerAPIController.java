@@ -6,14 +6,15 @@ import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.dto.RequestDTO;
 import com.flow.extensionBlocker.service.ExtensionBlockerService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/extension/")
+@AllArgsConstructor
 public class ExtensionBlockerAPIController {
-    @Autowired
-    ExtensionBlockerService service;
+    private final ExtensionBlockerService service;
 
     @PostMapping("/custom")
     public BaseResponse<Object> registerExtension(@RequestBody RequestDTO requestDTO) {

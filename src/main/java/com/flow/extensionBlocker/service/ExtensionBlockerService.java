@@ -7,9 +7,9 @@ import com.flow.extensionBlocker.domain.ExtensionType;
 import com.flow.extensionBlocker.dto.ExtensionBlockerDTO;
 import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.repository.ExtensionBlockerRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +18,14 @@ import java.util.Locale;
 
 @Service
 @Log4j2
+@AllArgsConstructor
 public class ExtensionBlockerService {
-    @Autowired
-    ModelMapper modelMapper;
+    private static final int MAX_EXTENSION_NAME_LENGTH = 20;  //최대 확장자 이름 길이
+    private static final int MAX_EXTENSION_LIMIT = 200;  //최대 확장자 개수
+    private static final String VALID_EXTENSION_PATTERN = "^[a-z0-9]+$"; // 유효한 확장자 이름 패턴
 
-    @Autowired
-    ExtensionBlockerRepository repository;
+    private final ModelMapper modelMapper;
+    private final ExtensionBlockerRepository repository;
 
     @Transactional
     public ExtensionBlockerResponseDTO registerExtension(ExtensionBlockerDTO extensionRequestDTO) {
@@ -61,13 +63,19 @@ public class ExtensionBlockerService {
         String name = extensionBlockerDTO.getName();
 
         //1. 정규식 검사
-        if (!name.matches("^[a-z0-9]+$")) throw new BaseException(BaseResponseStatus.INVALID_EXTENSION_NAME);
+        if (!name.matches(VALID_EXTENSION_PATTERN)) {
+            throw new BaseException(BaseResponseStatus.INVALID_EXTENSION_NAME);
+        }
 
         //2. 문자 길이 검사
-        if (name.length() > 20) throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
+        if (name.length() > MAX_EXTENSION_NAME_LENGTH) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
+        }
 
         //3. 최대 갯수 제한
-        if (repository.findAllCustomExtensionWithBanned().size() >= 200) throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
+        if (repository.findAllCustomExtensionWithBanned().size() >= MAX_EXTENSION_LIMIT) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
+        }
 
         ExtensionBlocker savedEntity = repository.save(dtoToEntity(extensionBlockerDTO));
         return entityToDto(savedEntity);
