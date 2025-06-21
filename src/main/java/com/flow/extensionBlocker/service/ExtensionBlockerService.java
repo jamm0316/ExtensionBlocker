@@ -22,14 +22,20 @@ import java.util.Locale;
 public class ExtensionBlockerService {
     private static final int MAX_EXTENSION_NAME_LENGTH = 20;  //최대 확장자 이름 길이
     private static final int MAX_EXTENSION_LIMIT = 200;  //최대 확장자 개수
-    private static final String VALID_EXTENSION_PATTERN = "^[a-z0-9]+$"; // 유효한 확장자 이름 패턴
+    private static final String VALID_EXTENSION_PATTERN_STRING_INTEGER = "^[a-z0-9]+$"; // 유효한 확장자 이름 패턴
+    private static final String ONLY_INTEGER_PATTERN = "^[0-9]+$"; // 숫자만 들어오면 거절
 
     private final ModelMapper modelMapper;
     private final ExtensionBlockerRepository repository;
 
     @Transactional
     public ExtensionBlockerResponseDTO registerExtension(ExtensionBlockerDTO extensionRequestDTO) {
-        String lowerCaseName = extensionRequestDTO.getName().toLowerCase(Locale.ROOT);
+        String name = extensionRequestDTO.getName();
+        if (name == null || name.trim().isEmpty()) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_REQUIRED);
+        }
+
+        String lowerCaseName = extensionRequestDTO.getName().trim().toLowerCase(Locale.ROOT);
         extensionRequestDTO.setName(lowerCaseName);
 
         if (isPreviouslyDeleted(lowerCaseName)) {
@@ -62,17 +68,27 @@ public class ExtensionBlockerService {
     public ExtensionBlockerResponseDTO createNewExtension(ExtensionBlockerDTO extensionBlockerDTO) {
         String name = extensionBlockerDTO.getName();
 
-        //1. 정규식 검사
-        if (!name.matches(VALID_EXTENSION_PATTERN)) {
+        //1. 입력값 null 또는 빈 문자열 검사
+        if (name == null || name.trim().isEmpty()) {
+            throw new BaseException(BaseResponseStatus.EXTENSION_NAME_REQUIRED);
+        }
+
+        //2-1. 정규식 검사(영소문자 + 숫자만 허용)
+        if (!name.matches(VALID_EXTENSION_PATTERN_STRING_INTEGER)) {
             throw new BaseException(BaseResponseStatus.INVALID_EXTENSION_NAME);
         }
 
-        //2. 문자 길이 검사
+        //2-2. 정규식 검사(숫자만 입력된 경우 예외발생)
+        if (name.matches(ONLY_INTEGER_PATTERN)) {
+            throw new BaseException(BaseResponseStatus.INVALID_EXTENSION_NAME);
+        }
+
+        //3. 문자 길이 검사
         if (name.length() > MAX_EXTENSION_NAME_LENGTH) {
             throw new BaseException(BaseResponseStatus.EXTENSION_NAME_LENGTH_EXCEEDED);
         }
 
-        //3. 최대 갯수 제한
+        //4. 최대 갯수 제한
         if (repository.findAllCustomExtensionWithBanned().size() >= MAX_EXTENSION_LIMIT) {
             throw new BaseException(BaseResponseStatus.EXTENSION_LIMIT_EXCEEDED);
         }
