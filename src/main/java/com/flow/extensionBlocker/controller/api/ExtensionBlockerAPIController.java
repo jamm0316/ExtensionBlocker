@@ -7,7 +7,6 @@ import com.flow.extensionBlocker.dto.ExtensionBlockerResponseDTO;
 import com.flow.extensionBlocker.dto.RequestDTO;
 import com.flow.extensionBlocker.service.ExtensionBlockerService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
