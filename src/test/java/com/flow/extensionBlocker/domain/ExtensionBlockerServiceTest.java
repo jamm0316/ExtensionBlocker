@@ -49,6 +49,29 @@ public class ExtensionBlockerServiceTest {
     }
 
     @Test
+    @DisplayName("입력값이 null 또는 빈 문자열일 경우 예외를 던진다")
+    public void nullOrEmptyExtensionNameThrowsException() {
+        // given
+        ExtensionBlockerDTO nullNameDto = ExtensionBlockerDTO.builder()
+                .name(null)
+                .build();
+
+        // when
+        ExtensionBlockerDTO emptyNameDto = ExtensionBlockerDTO.builder()
+                .name("  ")
+                .build();
+
+        // then
+        assertThatThrownBy(() -> service.registerExtension(nullNameDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.EXTENSION_NAME_REQUIRED.getMessage());
+
+        assertThatThrownBy(() -> service.registerExtension(emptyNameDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.EXTENSION_NAME_REQUIRED.getMessage());
+    }
+
+    @Test
     @DisplayName("확장자 명은 무조건 소문자로 저장함")
     public void extensionNameToLowerCase() throws Exception {
         //given
@@ -251,6 +274,20 @@ public class ExtensionBlockerServiceTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
         assertThatThrownBy(() -> service.registerExtension(sample3))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
+    }
+
+    @Test
+    @DisplayName("숫자만 입력한 경우 예외를 던진다")
+    public void numericOnlyExtensionNameThrowsException() {
+        // given
+        ExtensionBlockerDTO numericDto = ExtensionBlockerDTO.builder()
+                .name("123456")
+                .build();
+
+        // then
+        assertThatThrownBy(() -> service.registerExtension(numericDto))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.INVALID_EXTENSION_NAME.getMessage());
     }
