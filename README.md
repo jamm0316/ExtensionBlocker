@@ -24,6 +24,11 @@
 
 <br>
 
+## 🎯 Trouble Shooting
+ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정입니다.
+👉 [TroubleShooting 바로가기](https://jamm0316.notion.site/215cda6b86ff80979a93dc08ca8c1170?source=copy_link)
+
+
 ## 🧪 주요 기능
 <h3>✅ 주요 기능</h3>
 <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; text-align: left; width: 100%;">
