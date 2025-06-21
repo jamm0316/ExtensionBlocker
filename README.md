@@ -4,13 +4,28 @@
 - ExtensionBlocker는 관리자가 허용하지 않은 파일 확장자를 등록 및 관리하여, 사용자로부터의 파일 업로드를 제어할 수 있는 보안 유틸리티입니다.
 - 고정 확장자 관리 및 커스텀 확장자 등록/삭제가 가능하며, 고정확장자를 제외한 최대 200개까지 커스텀 확장자를 차단할 수 있습니다.
 
+## 📚 목차
+
+- [🧱 프로젝트 소개](#-extensionblocker)
+- [🛠 Tech Stack](https://github.com/jamm0316/ExtensionBlocker/edit/dev/README.md#-tech-stack)
+- [🧱 Architecture](#-architecture)
+- [🎯 Trouble Shooting](#-trouble-shooting)
+- [🧪 주요 기능](#-주요-기능)
+- [🖥️ UI 화면 및 기능 소개](#-ui-화면-및-기능-소개)
+- [🔐 API 명세](#-api-명세)
+- [DB 구조](#db-구조)
+- [📁 디렉토리 구조](#-디렉토리-구조)
+
+  
 <br>
 
 ## 🛠 Tech Stack
+- Language / JDK: Java 17
+- Framework: Spring Boot 3.5.0 (with Spring Data JPA)
 - Frontend: Thymeleaf, jQuery, Bootstrap 5
-- Backend: Java 17, Spring Boot 3.5.0, Spring Data JPA
 - Database: PostgreSQL
-- Infra: AWS Elastic Beanstalk
+- Infrastructure: AWS Elastic Beanstalk (Nginx 설정 포함)
+- Development Environment: IntelliJ IDEA on macOS
 
 <br>
 
@@ -20,13 +35,15 @@
 <br>
 
 > - 전체 구조: Controller - Service - Repository 레이어로 구성된 전형적인 Spring MVC 아키텍처.
-> - 모든 예외는 GlobalExceptionHandler 통해 처리되며, 확장자 등록/삭제 로직에 대한 유효성 검증이 Service 단에서 수행됨.
+> - 모든 예외는 GlobalExceptionHandler 통해 처리되며, BaseResponse + BaseResponseStatus 일관된 형식으로 응답.
 
 <br>
 
 ## 🎯 Trouble Shooting
 ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정입니다. 
 [👉 TroubleShooting 바로가기](https://jamm0316.notion.site/215cda6b86ff80979a93dc08ca8c1170?source=copy_link)
+
+<br>
 
 ## 🧪 주요 기능
 <h3>✅ 주요 기능</h3>
@@ -59,15 +76,7 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 
 <br>
 
-## 🧭 개발 환경
-- IDE: IntelliJ IDEA
-- JDK: Java 17
-- OS: macOS
-- 배포: Elastic Beanstalk (Nginx 설정 포함)
-
-<br>
-
-## 🖥️ UI 화면
+## 🖥️ UI 화면 및 기능 소개
 <img width="359" alt="image" src="https://github.com/user-attachments/assets/9528b886-f7f2-4e0b-8f62-1072b173289a" />
 
 ### ✅ 고정 확장자 관리
@@ -81,9 +90,6 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 ### ❌ 커스텀 확장자 삭제
 	• 삭제 시 DB에서 제거되지 않고 isBanned = false 처리
 	• 삭제 후 자동 새로고침으로 화면 동기화됨
-
-### 🧪 예외 처리
-	• 모든 예외는 BaseResponse + BaseResponseStatus 일관된 형식으로 응답
 
 <br>
 
@@ -115,11 +121,12 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
     </tr>
   </tbody>
 </table>
-> 모든 요청/응답은 BaseResponse<T> 형태로 반환됩니다.
+
+> 모든 요청/응답은 <code>BaseResponse<T></code> 형태로 반환됩니다.
   
 <br>
 
-## DB 구조
+## 💾 DB 구조
 <img width="203" alt="image" src="https://github.com/user-attachments/assets/0b86587a-b04c-49c5-b75c-d686b561bb9b" />
 <details>
   <summary>DDL</summary>
