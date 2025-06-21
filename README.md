@@ -7,7 +7,7 @@
 ## 📚 목차
 
 - [🧱 프로젝트 소개](#-extensionblocker)
-- [🛠 Tech Stack](https://github.com/jamm0316/ExtensionBlocker/edit/dev/README.md#-tech-stack)
+- [🛠 Tech Stack](#-tech-stack)
 - [🧱 Architecture](#-architecture)
 - [🎯 Trouble Shooting](#-trouble-shooting)
 - [🧪 주요 기능](#-주요-기능)
@@ -17,7 +17,7 @@
 - [📁 디렉토리 구조](#-디렉토리-구조)
 
   
-<br>
+<hr>
 
 ## 🛠 Tech Stack
 - Language / JDK: Java 17
