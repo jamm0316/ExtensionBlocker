@@ -25,7 +25,7 @@
 <br>
 
 ## 🎯 Trouble Shooting
-ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정입니다.
+ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정입니다.<br>
 👉 [TroubleShooting 바로가기](https://jamm0316.notion.site/215cda6b86ff80979a93dc08ca8c1170?source=copy_link)
 
 
