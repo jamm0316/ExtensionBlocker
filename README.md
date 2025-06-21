@@ -45,7 +45,6 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 <br>
 
 ## 🧪 주요 기능
-<h3>✅ 주요 기능</h3>
 <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; text-align: left; width: 100%;">
   <thead style="background-color: #2b2b2b; color: white;">
     <tr>
@@ -93,7 +92,6 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 <br>
 
 ## 🔐 API 명세
-<h3>📡 API 명세</h3>
 <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; text-align: left; width: 100%;">
   <thead style="background-color: #2b2b2b; color: white;">
     <tr>
