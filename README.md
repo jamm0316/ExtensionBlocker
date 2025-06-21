@@ -125,7 +125,6 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 
 ## 💾 DB 구조
 <img width="203" alt="image" src="https://github.com/user-attachments/assets/0b86587a-b04c-49c5-b75c-d686b561bb9b" />
-<details>
   <summary>DDL</summary>
 <pre>
   CREATE TABLE extension_blocker (
@@ -139,12 +138,10 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
       modified_by  BIGINT NOT NULL
   );
 </pre>
-</details>
   
 <br>
 
 ## 📁 디렉토리 구조
-<details>
   <summary>frontend</summary>
   <pre>
 	resources
@@ -178,9 +175,7 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 	    └── inputs
 		└── customExtensionInput.html
   </pre>
-</details>
 
-<details>
   <summary>backend</summary>
   <pre>
 	extensionBlocker
@@ -215,4 +210,3 @@ ExtensionBlocker 개발 및 배포 중 마주친 주요 문제와 해결 과정�
 	└── service
 	    └── ExtensionBlockerService.java
   </pre>
-</details>
