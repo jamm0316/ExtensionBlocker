@@ -6,7 +6,6 @@
 
 ## 📚 목차
 
-- [🧱 프로젝트 소개](#-extensionblocker)
 - [🛠 Tech Stack](#-tech-stack)
 - [🧱 Architecture](#-architecture)
 - [🎯 Trouble Shooting](#-trouble-shooting)
