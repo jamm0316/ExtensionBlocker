@@ -10,7 +10,7 @@
 - [🧱 Architecture](#-architecture)
 - [🎯 Trouble Shooting](#-trouble-shooting)
 - [🧪 주요 기능](#-주요-기능)
-- [🖥️ UI 화면 및 기능 소개](#-ui-화면-및-기능-소개)
+- [🖥️ UI 화면 및 기능 소개](#-%EF%B8%8F-ui-화면-및-기능-소개)
 - [🔐 API 명세](#-api-명세)
 - [💾 DB 구조](#-db-구조)
 - [📁 디렉토리 구조](#-디렉토리-구조)
